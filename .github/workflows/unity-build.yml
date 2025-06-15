@@ -18,15 +18,12 @@ jobs:
           path: Client/UnityCI/Library
           key: Library-${{ runner.os }}-${{ hashFiles('Client/UnityCI/Assets/**', 'Client/UnityCI/ProjectSettings/**') }}
           
-      - name: Activate Unity License
-        uses: game-ci/unity-activate@v2
-        with:
-          unityVersion: 6000.0.24f1
-          username: ${{ secrets.UNITY_EMAIL }}
-          password: ${{ secrets.UNITY_PASSWORD }}
-          
       - name: Build project
         uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           projectPath: Client/UnityCI
           unityVersion: 6000.0.24f1
