@@ -28,10 +28,9 @@ jobs:
       - name: Build project
         uses: game-ci/unity-builder@v4
         with:
-          projectPath: .
+          projectPath: Client/UnityCI
           unityVersion: 6000.0.24f1
           targetPlatform: StandaloneWindows64
-        working-directory: Client/UnityCI
 
       - name: Upload Build
         uses: actions/upload-artifact@v4
