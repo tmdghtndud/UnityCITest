@@ -1,0 +1,1 @@
+[Convert]::ToBase64String([IO.File]::ReadAllBytes(".\..\Temp\user.keystore")) > keystore.base64.txt
