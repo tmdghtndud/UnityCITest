@@ -28,6 +28,7 @@ jobs:
           projectPath: Client/UnityCI
           unityVersion: 6000.0.24f1
           targetPlatform: Android
+          buildMethod: ExternalTools.DependencyResolver.Resolve
           androidExportType: 'androidPackage'
           androidKeystoreName: user.keystore
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
