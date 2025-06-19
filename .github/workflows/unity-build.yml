@@ -39,7 +39,7 @@ jobs:
         with:
           projectPath: Client/UnityCI
           unityVersion: 6000.0.24f1
-          allowDirtyBuild: true
+          versioning: None             # ← Semantic 대신 None
           targetPlatform: Android
           androidExportType: 'androidPackage'
           androidKeystoreName: user.keystore
