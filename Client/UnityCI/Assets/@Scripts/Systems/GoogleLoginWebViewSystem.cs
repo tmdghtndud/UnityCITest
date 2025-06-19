@@ -21,10 +21,12 @@ public class GoogleLoginWebViewSystem
             RequestProfile = true,
             RequestIdToken = true,
             RequestAuthCode = true,
-            WebClientId = "550559090082-5fchrj8tj3arltl2ktv615hla7f3veat.apps.googleusercontent.com",
+            WebClientId = "650096840978-m9bh5a2qtu9btm5k1v97vjdg7b86srhq.apps.googleusercontent.com",
 #if UNITY_EDITOR || UNITY_STANDALONE
-            ClientSecret = "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"
+            ClientSecret = "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"
 #endif
+            //androidclient id
+            //650096840978-vqp24ti8aov35rv0rcr0t9khviuld7e9.apps.googleusercontent.com
         };
 
         GoogleSignIn.DefaultInstance.SignIn().ContinueWith(OnAuthenticationFinished, TaskScheduler.FromCurrentSynchronizationContext());

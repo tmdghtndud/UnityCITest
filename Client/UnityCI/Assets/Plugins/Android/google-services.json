@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "650096840978",
+    "project_id": "animalwars-f19bd",
+    "storage_bucket": "animalwars-f19bd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650096840978:android:95e141fb46c550069b63cb",
+        "android_client_info": {
+          "package_name": "com.bluemusket.animalwars"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650096840978-vqp24ti8aov35rv0rcr0t9khviuld7e9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bluemusket.animalwars",
+            "certificate_hash": "ae618484a0a8a41461a4972c33b9a17917121d0e"
+          }
+        },
+        {
+          "client_id": "114105300921971011415",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARI3rqUT8tKipz3gr_ts-SN4I8fJGbOrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114105300921971011415",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
