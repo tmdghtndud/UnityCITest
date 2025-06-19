@@ -39,6 +39,7 @@ jobs:
         with:
           projectPath: Client/UnityCI
           unityVersion: 6000.0.24f1
+          allowDirtyBuild: true
           targetPlatform: Android
           androidExportType: 'androidPackage'
           androidKeystoreName: user.keystore
