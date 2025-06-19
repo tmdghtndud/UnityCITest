@@ -9,47 +9,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Cache Library
-        uses: actions/cache@v4
-        with:
-          path: Client/UnityCI/Library
-          key: Library-${{ runner.os }}-${{ hashFiles('Client/UnityCI/Assets/**', 'Client/UnityCI/ProjectSettings/**') }}
-          
-      - name: Resolve Android dependencies (EDM4U)
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          projectPath: Client/UnityCI
-          unityVersion: 6000.0.24f1
-          targetPlatform: StandaloneLinux64
-          buildMethod: GooglePlayServices.PlayServicesResolver.MenuResolve
-        
-      - name: Build project
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          projectPath: Client/UnityCI
-          unityVersion: 6000.0.24f1
-          versioning: None             # ← Semantic 대신 None
-          targetPlatform: Android
-          androidExportType: 'androidPackage'
-          androidKeystoreName: user.keystore
-          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          androidKeystorePass: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          androidKeyaliasName: ${{ secrets.ANDROID_KEY_ALIAS }}
-          androidKeyaliasPass: ${{ secrets.ANDROID_KEY_PASSWORD }}
+    #################################################################
+    #  (1) 여유 공간 확보: 8~12 GB 가량 삭제                          #
+    #################################################################
+    - name: Free disk space on runner
+      run: |
+        echo "Initial free space:" && df -h /
+        sudo docker system prune -af
+        # Android, dotnet, haskell, ghc 등 불필요한 사전 설치 제거
+        sudo rm -rf /usr/local/lib/android /usr/share/dotnet \
+                    /opt/ghc /usr/local/.ghcup || true
+        echo "After cleanup:" && df -h /
 
-      - name: Upload Build
-        uses: actions/upload-artifact@v4
-        with:
-          name: Build
-          path: build/Android
+    #################################################################
+    #  (2) 의존성 Resolve   ― Android 이미지를 바로 사용            #
+    #################################################################
+    - name: Resolve Android dependencies (EDM4U)
+      uses: game-ci/unity-builder@v4
+      env:
+        UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+        UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      with:
+        projectPath:    Client/UnityCI
+        unityVersion:   6000.0.24f1
+        targetPlatform: Android                # ← Standalone → Android
+        buildMethod:   GooglePlayServices.PlayServicesResolver.MenuResolve
+        versioning:    None                    # 버전 계산 불필요
+
+    #################################################################
+    #  (3) 실제 Android 빌드 (이미지 재사용)                        #
+    #################################################################
+    - name: Build project
+      uses: game-ci/unity-builder@v4
+      env:
+        UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+        UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      with:
+        projectPath:    Client/UnityCI
+        unityVersion:   6000.0.24f1
+        targetPlatform: Android
+        allowDirtyBuild: true                  # manifest.json 변경 허용
+        androidExportType: androidPackage
+        androidKeystoreName: user.keystore
+        androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        androidKeystorePass:   ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        androidKeyaliasName:   ${{ secrets.ANDROID_KEY_ALIAS }}
+        androidKeyaliasPass:   ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Build
+        path: build/Android
